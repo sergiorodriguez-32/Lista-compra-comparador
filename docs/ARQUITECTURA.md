@@ -4,8 +4,9 @@ Resumen técnico del comparador de listas de la compra. Sirve para ponerse al d�
 (por ejemplo, al empezar una conversación nueva con Claude: *"lee docs/ARQUITECTURA.md,
 docs/FUNCIONALIDADES.md y docs/SESIONES.md"*).
 
-> **Estado:** idea y modelo de datos cerrados (29/09/2026). Listo para empezar el Hito 1 del
-> plan (esqueleto de backend y frontend).
+> **Estado:** idea y modelo de datos cerrados (29/09/2026); requisitos cerrados el 07/10/2026
+> (ver [REQUISITOS.md](REQUISITOS.md), que modifica el modelo y las rutas de abajo). Listo para
+> empezar el Hito 1 del plan (esqueleto de backend y frontend).
 
 ---
 

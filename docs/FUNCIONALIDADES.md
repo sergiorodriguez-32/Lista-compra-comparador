@@ -37,7 +37,14 @@ hace presencialmente en la tienda.
   envases a unidad base (2 packs de 12 huevos comprados → +24 huevos en Despensa).
 - **Aviso de stock bajo**: cuando la cantidad de un producto llega al umbral, la app avisa
   para añadirlo a Compra. El umbral es **una configuración global del usuario** (ej. "avisar
-  cuando quede ≤ 1"), no se configura producto a producto.
+  cuando quede ≤ 1"), con la posibilidad de fijar uno propio en un producto concreto.
+- **Consumo programado**: para no restar a mano cada día, se programa cuánto se gasta de un
+  producto (ej. 2 huevos al día) y la app lo resta sola. Si un día no se consume, se edita la
+  cantidad a mano. Cuando el producto llega al **umbral de stock bajo** (antes de acabarse), **pasa solo a Compra** (1 envase) con un aviso.
+- Cada producto muestra **todos sus ingredientes** (y valores nutricionales) directamente en
+  Despensa y en Compra.
+- **Categorías** (como en los supermercados): Alimentación → Seco · Congelado · Fresco · Fruta;
+  y Droguería (todo lo demás).
 
 ## 3. Compra
 
@@ -49,8 +56,12 @@ hace presencialmente en la tienda.
   huevos", "3 botellas de leche") — es lo que tiene sentido al hacer la compra.
 - Muestra el **precio total estimado** sumando todos los productos (precio del envase ×
   número de envases).
-- Al **marcar un producto como comprado**, se mueve/suma automáticamente a **Despensa** — esa
-  acción no implica ningún ajuste manual en ese momento.
+- Cada item tiene un botón **"A Despensa"** (un clic): lo suma a **Despensa**, lo registra en
+  el historial de compras y lo quita de la lista. La casilla de marcado es solo visual. En
+  Despensa hay botones **+ / −** y **"A Compra"** (añade 1 envase) para moverse sin fricción.
+- Los items muestran el desglose del envase ("1 paquete (12 unidades)").
+- Al pie de la lista se ve el **total estimado**, que alimentará el módulo de **estadísticas**
+  (gasto mensual y por categoría: carne, pescado, congelados, droguería...).
 - **Descargar la lista en PDF**, para no depender de tener cobertura/datos dentro del
   supermercado.
 
@@ -72,14 +83,15 @@ Productos ──► Despensa ──► (queda poco, aviso) ──► Compra ─�
 - Listas compartidas entre varios usuarios.
 - Notificaciones push de verdad (requeriría convertir el frontend en PWA) — de momento el
   aviso de stock bajo es un indicador dentro de la app.
-- Historial/estadísticas de gasto a lo largo del tiempo.
+- ~~Historial/estadísticas de gasto~~ → ahora **sí** previsto (fase v2); el historial se guarda
+  desde el MVP. Ver [REQUISITOS.md](REQUISITOS.md).
 
 ## Decisiones confirmadas (antes eran preguntas abiertas)
 
 1. **Compra = lista permanente por defecto + listas adicionales con nombre** para casos
    puntuales. Existe la entidad `ShoppingList`.
-2. Al marcar como comprado, **se devuelve automáticamente a Despensa** sumando cantidad;
-   después el ajuste es manual.
+2. ~~Al marcar como comprado se devolvía automáticamente a Despensa~~ → (07/10/2026) ahora es
+   un **botón "A Despensa"** explícito; después el ajuste es manual.
 3. La descarga de la lista es en **PDF**.
 4. El umbral de aviso de stock bajo es **una configuración global del usuario**, no por
    producto.
