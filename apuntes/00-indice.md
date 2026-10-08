@@ -12,7 +12,8 @@ de **para qué sirve cada anotación (`@`)**.
 
 1. [Docker Compose y PostgreSQL](01-docker-compose-postgres.md)
 2. [Flujo de Git: ramas, commits y Pull Requests](02-git-flujo.md)
-3. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+3. [Esqueleto de Spring Boot](03-esqueleto-spring-boot.md) — estructura, `pom.xml`, starters, primeras anotaciones
+4. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
@@ -26,6 +27,8 @@ de **para qué sirve cada anotación (`@`)**.
 
 ## Dónde lo dejé
 
-Rama `chore/docker-postgres`: `docker-compose.yml` creado y PostgreSQL arrancado
-(contenedor `listacompra-db`, puerto 5435). Pendiente: commit, push y Pull Request.
-Después: esqueleto del backend con Spring Initializr.
+Hecho: `docker-compose.yml` con PostgreSQL (PR #2 mergeado).
+Rama activa: `feature/backend-esqueleto`. Proyecto generado con Spring Initializr (Boot 4.1.1).
+Hecho: conexión a PostgreSQL verificada (la app arranca, Flyway crea `flyway_schema_history`).
+Siguiente: commit + PR del esqueleto; luego rama `feature/entidad-user` con la primera
+migración (`V1__crear_tabla_users.sql`) y la entidad `User`.

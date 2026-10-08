@@ -70,8 +70,38 @@ Comandos útiles dentro de `psql`:
 vacío. Si cambio la contraseña en el yml después, **no cambia** (porque la base ya existe en
 el volumen). Para empezar de cero: `docker compose down -v` y volver a `up -d`.
 
-## Seguridad: la contraseña
+## Seguridad: la contraseña va en `.env`, no en el yml
 
-Ahora está escrita en el yml solo porque es una base local de desarrollo. Más adelante la
-moveré a un fichero `.env` (ya está en el `.gitignore`) y el compose la leerá con
-`${POSTGRES_PASSWORD}`. Regla general: **nunca subir contraseñas reales a Git**.
+Al principio dejé la contraseña escrita en el yml y llegó a `main` en un PR. Aunque el repo
+sea privado, es un mal hábito (si se hace público, queda en el historial). Solución:
+
+1. Fichero `.env` en la raíz (**ignorado por Git**, está en `.gitignore`) con los valores reales:
+
+```
+POSTGRES_DB=listacompracomparador
+POSTGRES_USER=listacompracomparador
+POSTGRES_PASSWORD=<mi contraseña>
+```
+
+2. En el `docker-compose.yml`, variables en vez de valores. Docker Compose lee `.env` solo:
+
+```yaml
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+```
+
+3. `.env.example` (**sí se sube**) con los mismos nombres y valores de mentira, para que quien
+   clone el repo sepa qué variables crear: `cp .env.example .env` y editar.
+
+4. Como las variables `POSTGRES_*` solo se aplican con el volumen vacío, al cambiar la
+   contraseña hay que recrear la base: `docker compose down -v` y `docker compose up -d`.
+
+5. La app Spring usa las mismas credenciales vía `DB_USER` / `DB_PASSWORD` (variables de
+   entorno de la configuración de ejecución de IntelliJ).
+
+Regla general: **nunca subir contraseñas a Git**. Si una contraseña llega al historial, se
+da por comprometida y se cambia (reescribir el historial no es necesario en un proyecto así).
+
+Comprobar que un fichero está ignorado: `git check-ignore -v .env`.
