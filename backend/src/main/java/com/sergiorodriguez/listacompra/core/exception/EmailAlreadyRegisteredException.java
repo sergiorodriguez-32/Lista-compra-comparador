@@ -1,4 +1,4 @@
-package com.sergiorodriguez.listacompra.core;
+package com.sergiorodriguez.listacompra.core.exception;
 
 public class EmailAlreadyRegisteredException extends RuntimeException {
 

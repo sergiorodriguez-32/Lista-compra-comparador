@@ -1,4 +1,8 @@
 package com.sergiorodriguez.listacompra.web;
 
-public record EtiquetaResponse() {
+public record UserResponse(
+        Long id,
+        String email,
+        String displayName
+) {
 }
