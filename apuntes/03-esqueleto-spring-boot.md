@@ -92,6 +92,25 @@ configura todo y levanta el servidor Tomcat embebido.
 **Importante:** como `@ComponentScan` solo mira desde el paquete de la clase de arranque
 hacia abajo, todas mis clases deben vivir bajo `com.sergiorodriguez.listacompra`.
 
+## Qué es Tomcat
+
+**Tomcat** es un *servidor web* (más exactamente, un contenedor de servlets) escrito en Java:
+el programa que **escucha en un puerto** (por defecto el 8080), recibe las peticiones HTTP
+(`GET /api/...`), se las pasa al código de la aplicación y devuelve la respuesta.
+
+- Antes, las apps Java se empaquetaban en un `.war` y había que instalar Tomcat aparte y
+  desplegarlas en él.
+- Spring Boot lo trae **embebido** (dentro de la dependencia `spring-boot-starter-webmvc`):
+  al arrancar la app, arranca Tomcat. Por eso basta con `java -jar app.jar` o el ▶ del IDE.
+- Equivalencias: en Python, `uvicorn`/`gunicorn` con FastAPI/Flask; en Node, el servidor de
+  Express (`app.listen(3000)`).
+- Se ve en el log: `Tomcat initialized with port 8080 (http)` y `Tomcat started on port 8080`.
+  La API estará en `http://localhost:8080`.
+- Cambiar el puerto: `server.port=8081` en `application.properties`.
+
+Flujo de una petición: `Navegador/Angular → Tomcat (8080) → DispatcherServlet de Spring MVC →
+@RestController → Servicio → Repositorio → PostgreSQL`.
+
 ## `application.properties`
 
 Formato `clave=valor`; Spring lee estas claves para configurarse.
