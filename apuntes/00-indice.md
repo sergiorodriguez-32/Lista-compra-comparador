@@ -12,38 +12,39 @@ de **para qué sirve cada anotación (`@`)**.
 
 1. [Docker Compose y PostgreSQL](01-docker-compose-postgres.md)
 2. [Flujo de Git: ramas, commits y Pull Requests](02-git-flujo.md)
-3. [Esqueleto de Spring Boot](03-esqueleto-spring-boot.md) — estructura, `pom.xml`, starters, primeras anotaciones
+3. [Esqueleto de Spring Boot](03-esqueleto-spring-boot.md) — estructura, `pom.xml`, starters, Tomcat, primeras anotaciones
 4. [Flyway y cómo escribir el DDL](04-flyway-y-ddl.md) — migraciones, `CREATE TABLE`, tipos, restricciones
 5. [Entidades JPA y sus anotaciones](05-jpa-entidades-anotaciones.md) — `@Entity`, `@Id`, `@Column`, Lombok, validación
 6. [Chuleta Java vs Python/JS/Kotlin](06-chuleta-java-vs-python-js-kotlin.md) — sintaxis y nombres para no liarme
 7. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
-8. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+8. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
+9. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
-- Esqueleto Spring Boot (Initializr, `pom.xml`, `application.properties`)
-- Anotaciones de Spring: `@SpringBootApplication`, `@Entity`, `@Id`, `@Column`,
-  `@RestController`, `@Service`, `@Repository`, `@Autowired`...
-- Flyway: migraciones
-- Spring Data JPA: repositorios
-- Spring Security + JWT
+- Spring Security + JWT (login y protección de endpoints)
+- Tests (JUnit, Mockito, tests de repositorio)
 - Angular: componentes, servicios, signals, routing, HttpClient
 
 ## Dónde lo dejé
 
-Hecho: `docker-compose.yml` con PostgreSQL (PR #2 mergeado).
-Rama activa: `feature/backend-esqueleto`. Proyecto generado con Spring Initializr (Boot 4.1.1).
-Hecho: esqueleto del backend, credenciales en `.env`, conexión a PostgreSQL (PRs #1-#3
-mergeados) y migración `V1__crear_tabla_users.sql` aplicada (tabla `users` creada y visible en
-la ventana Database de IntelliJ).
+Hecho (PRs mergeados en `main`): Docker + PostgreSQL, esqueleto del backend, credenciales en
+`.env`, migración `V1__crear_tabla_users.sql`, entidad `User` y `UserRepository`.
 
-Rama activa: `feature/entidad-user`.
+Siguiente: **registro de usuarios** (`POST /api/auth/register`, RF-01) en la rama
+`feature/registro-usuario`:
+1. dependencia `spring-security-crypto` (BCrypt) y bean `PasswordEncoder`
+2. DTOs `RegisterRequest` y `UserResponse` (en `web/`)
+3. `UserService.register(...)` (email duplicado → 409, hash de la contraseña)
+4. `AuthController` con `POST /api/auth/register` (201)
+5. manejo de errores con `@RestControllerAdvice`
+6. probar con un fichero `.http`
 
-Siguiente paso exacto: crear `User.java` en
-`backend/src/main/java/com/sergiorodriguez/listacompra/core/` (apuntes en
-[05-jpa-entidades-anotaciones.md](05-jpa-entidades-anotaciones.md)): `@Entity`, `@Table(name = "users")`,
-`@Id` + `@GeneratedValue(IDENTITY)`, `@Column`, Lombok `@Getter/@Setter/@NoArgsConstructor`;
-arrancar la app para que Hibernate valide el mapeo. Después: `UserRepository`, commit y PR.
+Pendiente de RF-01 (cuando exista la entidad): crear la lista de Compra por defecto "Mi compra".
 
 Recordatorio: arrancar Docker (`docker compose up -d`) antes de ejecutar la app, y tener
-`DB_USER`/`DB_PASSWORD` en la configuración de ejecución de IntelliJ.
+`DB_USER`/`DB_PASSWORD` en la configuración de ejecución de IntelliJ (usar siempre el ▶ de la
+barra superior con `ListacompraApplication` seleccionada).
+
+Git: **primero merge del PR en GitHub, después** `git checkout main` + `git pull` +
+`git branch -d <rama>`.
