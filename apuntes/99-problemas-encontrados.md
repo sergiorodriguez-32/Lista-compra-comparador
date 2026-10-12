@@ -43,6 +43,10 @@ Log continuo: cada vez que me atasco con algo, lo apunto aquí con la causa y la
   ListacompraApplication → Environment variables*, y ejecutar **esa** configuración.
 - **Pista general:** si en un error aparece `${...}` sin sustituir, el problema es siempre
   que esa variable/propiedad no está definida.
+- **Se repite** si IntelliJ crea otra configuración de ejecución (p. ej. al pulsar el ▶ verde
+  junto al `main` del editor): cada configuración tiene sus propias variables de entorno.
+  Usar siempre el ▶ de la barra superior con `ListacompraApplication` seleccionada y borrar
+  las configuraciones duplicadas.
 
 ## Puerto de PostgreSQL ocupado por otros contenedores
 

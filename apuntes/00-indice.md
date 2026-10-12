@@ -15,7 +15,9 @@ de **para qué sirve cada anotación (`@`)**.
 3. [Esqueleto de Spring Boot](03-esqueleto-spring-boot.md) — estructura, `pom.xml`, starters, primeras anotaciones
 4. [Flyway y cómo escribir el DDL](04-flyway-y-ddl.md) — migraciones, `CREATE TABLE`, tipos, restricciones
 5. [Entidades JPA y sus anotaciones](05-jpa-entidades-anotaciones.md) — `@Entity`, `@Id`, `@Column`, Lombok, validación
-6. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+6. [Chuleta Java vs Python/JS/Kotlin](06-chuleta-java-vs-python-js-kotlin.md) — sintaxis y nombres para no liarme
+7. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
+8. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
