@@ -103,11 +103,14 @@ sin redistribuir datos ni hacer scraping masivo.
 lista-compra-comparador/
 ├── backend/                    (Spring Boot, Maven) — pendiente de crear
 │   └── src/main/java/com/sergiorodriguez/listacompra/
-│       ├── core/                 entidades: User, Product, PantryItem, ShoppingList, ShoppingListItem
+│       ├── core/                 dominio: entidades (User, Product, PantryItem, ShoppingList,
+│       │   │                     ShoppingListItem), sus repositorios y servicios (UserService...)
+│       │   └── exception/          excepciones de negocio (EmailAlreadyRegisteredException...)
+│       ├── config/               beans de configuración (PasswordConfig...)
 │       ├── security/             Spring Security + JWT
 │       ├── providers/            MercadonaProvider, AlcampoProvider, AhorramasProvider
 │       ├── export/               generación del PDF de la lista de la compra
-│       └── web/                  controladores REST + DTOs
+│       └── web/                  controladores REST, DTOs y GlobalExceptionHandler
 ├── frontend/                   (Angular CLI) — pendiente de crear
 ├── docs/                       ARQUITECTURA.md · FUNCIONALIDADES.md · SESIONES.md
 ├── docker-compose.yml           PostgreSQL de desarrollo — pendiente de crear

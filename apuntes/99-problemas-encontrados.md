@@ -14,6 +14,20 @@ Log continuo: cada vez que me atasco con algo, lo apunto aquí con la causa y la
 - **Pista general:** si Spring "no ve" una configuración o una migración que sí existe en
   `src/`, mirar primero qué hay dentro de `target/classes`.
 
+## Postman devuelve `415 Unsupported Media Type`
+
+- **Síntoma:** al enviar el `POST` de registro, la API responde 415.
+- **Causa:** el cuerpo no se enviaba como JSON. En Postman el tipo de *Body → raw* viene por
+  defecto en `Text`, que manda `Content-Type: text/plain`; `@RequestBody` solo acepta JSON.
+- **Solución:** *Body → raw →* desplegable **JSON** (Postman añade solo la cabecera
+  `Content-Type: application/json`).
+
+## El cliente HTTP de IntelliJ (`.http`) pide suscripción
+
+- **Causa:** es una función de IntelliJ Ultimate; no está disponible sin licencia.
+- **Solución:** usar Postman o `curl.exe` (en PowerShell hay que escribir `curl.exe`; `curl`
+  es un alias de otro comando).
+
 ## Contraseña subida a Git por error
 
 - **Síntoma:** `docker-compose.yml` con `POSTGRES_PASSWORD` en claro llegó a `main` (PR #2).
