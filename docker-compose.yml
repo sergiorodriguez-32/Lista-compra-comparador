@@ -1,3 +1,4 @@
+# PostgreSQL para desarrollo. Las credenciales se leen del fichero .env (no se sube a Git).
 services:
   db:
     image: postgres:16
@@ -7,10 +8,12 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
+      # puerto_de_mi_PC:puerto_del_contenedor. Se usa el 5435 porque el 5433 y el 5434
+      # ya los ocupan los contenedores de los proyectos de la barbería.
       - "5435:5432"
     volumes:
+      # volumen con nombre: los datos sobreviven aunque se borre el contenedor
       - listacompra-data:/var/lib/postgresql/data
 
 volumes:
   listacompra-data:
-  
