@@ -18,7 +18,8 @@ de **para qué sirve cada anotación (`@`)**.
 6. [Chuleta Java vs Python/JS/Kotlin](06-chuleta-java-vs-python-js-kotlin.md) — sintaxis y nombres para no liarme
 7. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
 8. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
-9. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+9. [Receta CRUD: plantillas para un módulo nuevo](09-receta-crud.md) — migración → entidad → repositorio → DTOs → servicio → controlador
+10. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
