@@ -1,0 +1,29 @@
+### Registro correcto (espera 201 y un JSON con id, email y displayName; sin contraseña)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "sergio@example.com",
+  "password": "Clave12345",
+  "displayName": "Sergio"
+}
+
+### Datos inválidos: email sin formato y contraseña corta (espera 400 gracias a @Valid)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "esto-no-es-un-email",
+  "password": "123",
+  "displayName": ""
+}
+
+### Email repetido: ejecutar DESPUÉS del primero (sin manejador de errores dará 500; esperamos 409)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "sergio@example.com",
+  "password": "OtraClave123",
+  "displayName": "Otro Sergio"
+}

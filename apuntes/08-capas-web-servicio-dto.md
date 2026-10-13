@@ -185,14 +185,14 @@ public class PasswordConfig {
 }
 ```
 
-## Probar un endpoint
+## Probar un endpoint con Postman
 
-Con un fichero `.http` de IntelliJ (`backend/http/auth.http`):
+Postman es un cliente de APIs: envía peticiones HTTP y muestra la respuesta. Para el registro:
 
-```http
-POST http://localhost:8080/api/auth/register
-Content-Type: application/json
+1. Método **POST**, URL `http://localhost:8080/api/auth/register`.
+2. Pestaña **Body → raw → JSON** (si se deja en `Text` da **415**):
 
+```json
 {
   "email": "sergio@example.com",
   "password": "Clave12345",
@@ -200,4 +200,22 @@ Content-Type: application/json
 }
 ```
 
-Se ejecuta con el ▶ junto a la petición. También sirve Postman o `curl`.
+3. **Send**. Respuestas obtenidas en este proyecto:
+
+| Caso | Código | Cuerpo |
+|---|---|---|
+| Registro correcto | `201 Created` | `{ "id": 1, "email": "...", "displayName": "..." }` |
+| Email sin formato / contraseña corta | `400 Bad Request` | `ProblemDetail` con `"errores": { campo: mensaje }` |
+| Email ya registrado | `409 Conflict` | `ProblemDetail` con `"detail": "El email ya está registrado: ..."` |
+
+Alternativa por terminal (en PowerShell, `curl.exe`):
+
+```bash
+curl -i -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d '{"email":"a@b.com","password":"Clave12345","displayName":"A"}'
+```
+
+Comprobar que la contraseña se guardó cifrada (debe empezar por `$2a$10$`):
+
+```sql
+SELECT id, email, password_hash FROM users;
+```

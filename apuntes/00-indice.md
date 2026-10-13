@@ -31,16 +31,14 @@ de **para qué sirve cada anotación (`@`)**.
 Hecho (PRs mergeados en `main`): Docker + PostgreSQL, esqueleto del backend, credenciales en
 `.env`, migración `V1__crear_tabla_users.sql`, entidad `User` y `UserRepository`.
 
-Siguiente: **registro de usuarios** (`POST /api/auth/register`, RF-01) en la rama
-`feature/registro-usuario`:
-1. dependencia `spring-security-crypto` (BCrypt) y bean `PasswordEncoder`
-2. DTOs `RegisterRequest` y `UserResponse` (en `web/`)
-3. `UserService.register(...)` (email duplicado → 409, hash de la contraseña)
-4. `AuthController` con `POST /api/auth/register` (201)
-5. manejo de errores con `@RestControllerAdvice`
-6. probar con un fichero `.http`
+Hecho en la rama `feature/registro-usuario` (probado con Postman: 201, 400 y 409):
+`POST /api/auth/register` (RF-01) con BCrypt, DTOs, `UserService`, `AuthController` y
+`GlobalExceptionHandler`. Pendiente: abrir el PR y mergear.
 
 Pendiente de RF-01 (cuando exista la entidad): crear la lista de Compra por defecto "Mi compra".
+
+Siguiente: **login con JWT** (RF-02, `POST /api/auth/login`) con Spring Security, y proteger
+el resto de endpoints. Antes conviene añadir tests del registro.
 
 Recordatorio: arrancar Docker (`docker compose up -d`) antes de ejecutar la app, y tener
 `DB_USER`/`DB_PASSWORD` en la configuración de ejecución de IntelliJ (usar siempre el ▶ de la
