@@ -1,6 +1,10 @@
 package com.sergiorodriguez.listacompra.core;
 
 import com.sergiorodriguez.listacompra.core.exception.EmailAlreadyRegisteredException;
+import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
+import com.sergiorodriguez.listacompra.security.JwtService;
+import com.sergiorodriguez.listacompra.web.LoginRequest;
+import com.sergiorodriguez.listacompra.web.LoginResponse;
 import com.sergiorodriguez.listacompra.web.RegisterRequest;
 import com.sergiorodriguez.listacompra.web.UserResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,6 +33,9 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private JwtService jwtService;
 
     @InjectMocks
     private UserService userService;
@@ -75,5 +84,57 @@ class UserServiceTest {
 
         verify(userRepository, never()).save(any());
         verify(passwordEncoder, never()).encode(any());
+    }
+
+    @Test
+    @DisplayName("login con credenciales válidas devuelve el token")
+    void login_conCredencialesValidas_devuelveToken() {
+        // GIVEN: un usuario guardado y los mocks programados para el camino feliz
+        LoginRequest request = new LoginRequest("a@b.com", "clave1234");
+        User user = new User();
+        user.setEmail("a@b.com");
+        user.setPasswordHash("HASH");
+        when(userRepository.findByEmail("a@b.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("clave1234", "HASH")).thenReturn(true);
+        when(jwtService.generateToken(user)).thenReturn("TOKEN");
+
+        // WHEN
+        LoginResponse respuesta = userService.login(request);
+
+        // THEN
+        assertThat(respuesta.token()).isEqualTo("TOKEN");
+    }
+
+    @Test
+    @DisplayName("login con email inexistente lanza InvalidCredentialsException y no genera token")
+    void login_conEmailInexistente_lanzaInvalidCredentials() {
+        // GIVEN: findByEmail devuelve una caja vacía
+        LoginRequest request = new LoginRequest("nadie@b.com", "clave1234");
+        when(userRepository.findByEmail("nadie@b.com")).thenReturn(Optional.empty());
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> userService.login(request))
+                .isInstanceOf(InvalidCredentialsException.class);
+
+        verify(passwordEncoder, never()).matches(any(), any());
+        verify(jwtService, never()).generateToken(any());
+    }
+
+    @Test
+    @DisplayName("login con contraseña incorrecta lanza InvalidCredentialsException y no genera token")
+    void login_conPasswordIncorrecta_lanzaInvalidCredentials() {
+        // GIVEN: el usuario existe pero matches da false
+        LoginRequest request = new LoginRequest("a@b.com", "mala");
+        User user = new User();
+        user.setEmail("a@b.com");
+        user.setPasswordHash("HASH");
+        when(userRepository.findByEmail("a@b.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("mala", "HASH")).thenReturn(false);
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> userService.login(request))
+                .isInstanceOf(InvalidCredentialsException.class);
+
+        verify(jwtService, never()).generateToken(any());
     }
 }

@@ -1,6 +1,7 @@
 package com.sergiorodriguez.listacompra.web;
 
 import com.sergiorodriguez.listacompra.core.exception.EmailAlreadyRegisteredException;
+import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -44,5 +45,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST, "Datos de entrada no válidos");
         problema.setProperty("errores", errores); // se añade al JSON de respuesta
         return problema;
+    }
+
+    /** Email o contraseña incorrectos: la lanza UserService en el login. Responde 401. */
+    @ExceptionHandler(InvalidCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ProblemDetail handleCredencialesInvalidas(InvalidCredentialsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 }
