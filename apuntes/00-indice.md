@@ -19,27 +19,33 @@ de **para qué sirve cada anotación (`@`)**.
 7. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
 8. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
 9. [Receta CRUD: plantillas para un módulo nuevo](09-receta-crud.md) — migración → entidad → repositorio → DTOs → servicio → controlador
-10. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+10. [Tests unitarios: JUnit 5 + Mockito + AssertJ](10-tests-unitarios.md) — mocks, Given/When/Then, errores típicos
+11. [Spring Security y JWT: login y protección de la API](11-spring-security-jwt.md) — JWT, BCrypt, filtro, `SecurityConfig`, preguntas de entrevista
+12. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
-- Spring Security + JWT (login y protección de endpoints)
-- Tests (JUnit, Mockito, tests de repositorio)
+- Tests de repositorio y de controlador (`@DataJpaTest`, `MockMvc`)
+- Refresh tokens y logout
 - Angular: componentes, servicios, signals, routing, HttpClient
+- Apuntes de preparación de entrevistas (resumen de las preguntas típicas de cada tema)
 
 ## Dónde lo dejé
 
 Hecho (PRs mergeados en `main`): Docker + PostgreSQL, esqueleto del backend, credenciales en
 `.env`, migración `V1__crear_tabla_users.sql`, entidad `User` y `UserRepository`.
 
-Hecho en la rama `feature/registro-usuario` (probado con Postman: 201, 400 y 409):
-`POST /api/auth/register` (RF-01) con BCrypt, DTOs, `UserService`, `AuthController` y
-`GlobalExceptionHandler`. Pendiente: abrir el PR y mergear.
+También mergeado: registro de usuarios (RF-01, `POST /api/auth/register`) con BCrypt, DTOs,
+`UserService`, `AuthController`, `GlobalExceptionHandler` y los tests de `UserService`.
+
+Hecho en la rama `feature/login-jwt` (probado con Postman y con tests): login con JWT (RF-02,
+`POST /api/auth/login`), `JwtService`, `JwtAuthFilter`, `SecurityConfig` (el resto de rutas
+exigen token) y tests de `login` y de `JwtService`. Pendiente: abrir el PR y mergear.
 
 Pendiente de RF-01 (cuando exista la entidad): crear la lista de Compra por defecto "Mi compra".
 
-Siguiente: **login con JWT** (RF-02, `POST /api/auth/login`) con Spring Security, y proteger
-el resto de endpoints. Antes conviene añadir tests del registro.
+Siguiente: el primer endpoint protegido de verdad (p. ej. `GET /api/users/me` o el CRUD de
+Despensa) para ver el filtro JWT en acción, y después empezar el frontend con Angular.
 
 Recordatorio: arrancar Docker (`docker compose up -d`) antes de ejecutar la app, y tener
 `DB_USER`/`DB_PASSWORD` en la configuración de ejecución de IntelliJ (usar siempre el ▶ de la
