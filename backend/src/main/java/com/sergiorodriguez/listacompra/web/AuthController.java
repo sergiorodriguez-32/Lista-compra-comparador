@@ -26,6 +26,19 @@ public class AuthController {
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         // @RequestBody convierte el JSON en el record; @Valid ejecuta las validaciones del record
         return userService.register(request);
+
+
     }
+
+    /**
+     * POST /api/auth/login: inicia sesión (RF-02). Responde 200 con el token JWT, 400 si los
+     * datos no son válidos o 401 si el email o la contraseña son incorrectos.
+     */
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return userService.login(request);
+    }
+
+
 
 }
