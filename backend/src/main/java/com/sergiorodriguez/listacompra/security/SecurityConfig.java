@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // registro y login: públicos
+                        // documentación Swagger: pública para poder abrirla sin token
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())               // todo lo demás: con token
                 // Sin autenticar, responder 401 (por defecto Spring respondería 403)
                 .exceptionHandling(e -> e
