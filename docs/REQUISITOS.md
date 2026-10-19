@@ -114,6 +114,7 @@ Prioridad: **M** = debe (MVP) · **S** = debería · **C** = podría (después d
 | RNF-10 | Uso personal/educativo de las integraciones; sin scraping masivo ni redistribución de datos. |
 | RNF-11 | El consumo programado se ejecuta con una tarea programada (`@Scheduled`) diaria, idempotente (RN-15) y con test de los casos límite: cruzar el umbral, llegar a 0, varios días sin ejecutar, programación pausada, item ya en la lista de Compra. |
 | RNF-12 | Los ingredientes se muestran completos y legibles (también en móvil), con desplegable si son largos. |
+| RNF-13 | **Vigilancia de las integraciones (último hito):** tests de contrato contra las tiendas reales (estructura de la respuesta, no un producto concreto) ejecutados a diario con un workflow programado de GitHub Actions. Si fallan, avisan (issue o correo) sin modificar el código solo: el arreglo del provider es manual. Frecuencia baja, coherente con RNF-10. |
 
 ---
 
@@ -139,6 +140,7 @@ Prioridad: **M** = debe (MVP) · **S** = debería · **C** = podría (después d
 | **MVP** | Auth, Despensa, Compra con lista por defecto, productos manuales, búsqueda Mercadona, botones entre apartados, total estimado, historial | M |
 | **v1** | Alcampo, stock bajo (global + por item), **consumo programado y paso automático a Compra**, PDF, categorías, caché y paralelismo | S |
 | **v2** | Ahorramas, comparador lado a lado, listas con nombre, refrescar precios, estadísticas | C |
+| **Último hito** | Vigilancia diaria de las APIs/HTML de las tiendas con tests de contrato + GitHub Actions (RNF-13). Se hace al final, con los providers ya implementados | C |
 
 ---
 
