@@ -282,7 +282,7 @@ servicio y el usuario antes de cada test.
 Pega el token en **jwt.io** para ver el payload legible (y comprobar que modificar cualquier
 carácter invalida la firma).
 
-## Preguntas típicas de entrevista
+## Preguntas de repaso
 
 - **¿Qué es un JWT?** Un token firmado y autocontenido, con tres partes, que permite
   autenticar sin guardar sesión en el servidor.
