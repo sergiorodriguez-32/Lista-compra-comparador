@@ -2,6 +2,7 @@ package com.sergiorodriguez.listacompra.web;
 
 import com.sergiorodriguez.listacompra.core.exception.EmailAlreadyRegisteredException;
 import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
+import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -52,5 +53,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleCredencialesInvalidas(InvalidCredentialsException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    /** Producto inexistente o de otro usuario: la lanza ProductService. Responde 404. */
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleProductoNoEncontrado(ProductNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }
