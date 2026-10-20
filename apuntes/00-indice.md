@@ -1,9 +1,8 @@
 # Apuntes — Lista de la compra comparador
 
-Manual de aprendizaje que se va ampliando durante el desarrollo, para poder consultarlo
-aunque no pueda usar la IA (clase, entrevistas, trabajo). Cada archivo es un tema.
-Se escribe con **código de ejemplo** y, en cuanto empecemos con Spring, con una explicación
-de **para qué sirve cada anotación (`@`)**.
+Manual de aprendizaje que voy ampliando durante el desarrollo, para consultarlo rápido.
+Cada archivo es un tema. Se escribe con **código de ejemplo** y, en los temas de Spring,
+con una explicación de **para qué sirve cada anotación (`@`)**.
 
 > Diferencia con `docs/`: `docs/` dice **qué** hace la app y cómo está diseñada.
 > `apuntes/` explica **cómo funcionan las herramientas** que uso para construirla.
@@ -20,7 +19,7 @@ de **para qué sirve cada anotación (`@`)**.
 8. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
 9. [Receta CRUD: plantillas para un módulo nuevo](09-receta-crud.md) — migración → entidad → repositorio → DTOs → servicio → controlador
 10. [Tests unitarios: JUnit 5 + Mockito + AssertJ](10-tests-unitarios.md) — mocks, Given/When/Then, errores típicos
-11. [Spring Security y JWT: login y protección de la API](11-spring-security-jwt.md) — JWT, BCrypt, filtro, `SecurityConfig`, preguntas de entrevista
+11. [Spring Security y JWT: login y protección de la API](11-spring-security-jwt.md) — JWT, BCrypt, filtro, `SecurityConfig`, preguntas de repaso
 12. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
@@ -28,7 +27,6 @@ de **para qué sirve cada anotación (`@`)**.
 - Tests de repositorio y de controlador (`@DataJpaTest`, `MockMvc`)
 - Refresh tokens y logout
 - Angular: componentes, servicios, signals, routing, HttpClient
-- Apuntes de preparación de entrevistas (resumen de las preguntas típicas de cada tema)
 
 ## Dónde lo dejé
 

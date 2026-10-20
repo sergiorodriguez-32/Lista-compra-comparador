@@ -6,7 +6,7 @@ Un test unitario comprueba **una pieza aislada** (una clase, un método) sin arr
 aplicación, sin base de datos y sin red. Si el test pasa, esa pieza hace lo que debe; si
 alguien la rompe más adelante, el test falla y avisa.
 
-Para qué sirven (y qué se valora en entrevistas):
+Para qué sirven:
 - Detectan errores **antes** de probar a mano con Postman.
 - Permiten cambiar código sin miedo (si algo se rompe, un test lo dice).
 - Documentan cómo debe comportarse el código.
