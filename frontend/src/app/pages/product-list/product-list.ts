@@ -20,6 +20,8 @@ export class ProductList implements OnInit {
   lista = signal<ProductResponse[]>([]);
   cargando = signal(true);
   error = signal<string | null>(null);
+  // Error al borrar: aparte de 'error' para no esconder la lista entera si falla un borrado
+  errorBorrado = signal<string | null>(null);
 
   // La plantilla (HTML) solo ve lo que es público en la clase
   readonly categorias = CATEGORIAS;
@@ -28,6 +30,18 @@ export class ProductList implements OnInit {
   // ngOnInit lo llama Angular una vez, justo después de crear el componente: aquí se cargan los datos
   ngOnInit() {
     this.cargar();
+  }
+
+  borrar(producto: ProductResponse) {
+    // confirm() es el cuadro nativo del navegador: devuelve true si pulsa "Aceptar"
+    if (!confirm(`¿Borrar "${producto.name}"?`)) return;
+    this.errorBorrado.set(null);
+
+    this.products.delete(producto.id).subscribe({
+      // No hace falta volver a pedir la lista: se quita de la que ya tenemos
+      next: () => this.lista.update(lista => lista.filter(p => p.id !== producto.id)),
+      error: () => this.errorBorrado.set(`No se pudo borrar "${producto.name}"`),
+    });
   }
 
   cargar() {

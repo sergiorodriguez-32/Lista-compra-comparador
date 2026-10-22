@@ -3,6 +3,11 @@
     <h1>Mis productos</h1>
     <a mat-stroked-button routerLink="/">Volver</a>
   </header>
+  <a mat-flat-button class="nuevo" routerLink="/productos/nuevo">Nuevo producto</a>
+
+  @if (errorBorrado()) {
+  <p class="error">{{ errorBorrado() }}</p>
+  }
 
   <!-- @if / @else if / @else: solo se pinta UNA de estas ramas, según el estado -->
   @if (cargando()) {
@@ -33,6 +38,11 @@
           <p class="ingredientes">Ingredientes: {{ p.ingredients }}</p>
           }
         </mat-card-content>
+        <mat-card-actions>
+          <!-- [routerLink]="[...]" construye la ruta uniendo las partes: /productos/7/editar -->
+          <a mat-button [routerLink]="['/productos', p.id, 'editar']">Editar</a>
+          <button mat-button type="button" (click)="borrar(p)">Borrar</button>
+        </mat-card-actions>
       </mat-card>
     </li>
     }
