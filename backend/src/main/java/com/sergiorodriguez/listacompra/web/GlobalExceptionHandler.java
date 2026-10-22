@@ -5,6 +5,7 @@ import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsExceptio
 import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,6 +47,19 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST, "Datos de entrada no válidos");
         problema.setProperty("errores", errores); // se añade al JSON de respuesta
         return problema;
+    }
+
+    /**
+     * JSON mal formado o con un valor que no existe (p. ej. una categoría "PIZZA"): la lanza
+     * Spring al leer el cuerpo, antes de llegar a @Valid. Sin este método, Spring la reenvía a
+     * la ruta interna /error, que está protegida, y el cliente recibiría un 401 engañoso.
+     * Responde 400 Bad Request.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail handleJsonNoLegible(HttpMessageNotReadableException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                "El cuerpo de la petición no es un JSON válido o contiene un valor no permitido");
     }
 
     /** Email o contraseña incorrectos: la lanza UserService en el login. Responde 401. */
