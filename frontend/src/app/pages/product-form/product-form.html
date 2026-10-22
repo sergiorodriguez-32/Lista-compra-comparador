@@ -1,0 +1,67 @@
+<mat-card class="tarjeta">
+  <mat-card-header>
+    <mat-card-title>{{ id() === null ? 'Nuevo producto' : 'Editar producto' }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="enviar()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" maxlength="200" />
+        <!-- mat-error solo se ve cuando el campo es inválido y el usuario lo ha tocado -->
+        <mat-error>El nombre es obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Marca (opcional)</mat-label>
+        <input matInput formControlName="brand" maxlength="100" />
+      </mat-form-field>
+
+      <div class="fila">
+        <mat-form-field appearance="outline">
+          <mat-label>Precio (€)</mat-label>
+          <input matInput type="number" step="0.01" min="0" formControlName="price" />
+          <mat-error>Indica un precio (0 o más)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contenido del envase</mat-label>
+          <input matInput type="number" step="any" min="0" formControlName="packageAmount" />
+          <mat-error>Debe ser mayor que 0</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Unidad</mat-label>
+          <mat-select formControlName="packageUnit">
+            @for (u of unidades; track u.valor) {
+            <mat-option [value]="u.valor">{{ u.texto }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="category">
+          @for (c of categorias; track c.valor) {
+          <mat-option [value]="c.valor">{{ c.texto }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ingredientes (opcional)</mat-label>
+        <textarea matInput rows="3" formControlName="ingredients"></textarea>
+      </mat-form-field>
+
+      @if (error()) {
+      <p class="error">{{ error() }}</p>
+      }
+
+      <div class="acciones">
+        <button mat-flat-button type="submit" [disabled]="guardando()">Guardar</button>
+        <a mat-stroked-button routerLink="/productos">Cancelar</a>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

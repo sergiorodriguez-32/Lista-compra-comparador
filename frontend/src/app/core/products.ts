@@ -69,6 +69,10 @@ export class Products {
     return this.http.get<ProductResponse[]>(this.url);
   }
 
+  get(id: number) {
+    return this.http.get<ProductResponse>(`${this.url}/${id}`);
+  }
+
   create(datos: ProductRequest) {
     return this.http.post<ProductResponse>(this.url, datos);
   }
