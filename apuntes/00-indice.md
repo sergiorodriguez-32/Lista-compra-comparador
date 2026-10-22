@@ -14,13 +14,12 @@ con una explicación de **para qué sirve cada anotación (`@`)**.
 3. [Esqueleto de Spring Boot](03-esqueleto-spring-boot.md) — estructura, `pom.xml`, starters, Tomcat, primeras anotaciones
 4. [Flyway y cómo escribir el DDL](04-flyway-y-ddl.md) — migraciones, `CREATE TABLE`, tipos, restricciones
 5. [Entidades JPA y sus anotaciones](05-jpa-entidades-anotaciones.md) — `@Entity`, `@Id`, `@Column`, Lombok, validación
-6. [Chuleta Java vs Python/JS/Kotlin](06-chuleta-java-vs-python-js-kotlin.md) — sintaxis y nombres para no liarme
-7. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
-8. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
-9. [Receta CRUD: plantillas para un módulo nuevo](09-receta-crud.md) — migración → entidad → repositorio → DTOs → servicio → controlador
-10. [Tests unitarios: JUnit 5 + Mockito + AssertJ](10-tests-unitarios.md) — mocks, Given/When/Then, errores típicos
-11. [Spring Security y JWT: login y protección de la API](11-spring-security-jwt.md) — JWT, BCrypt, filtro, `SecurityConfig`, preguntas de repaso
-12. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
+6. [Spring Data JPA: repositorios](07-spring-data-repositorios.md) — `JpaRepository`, métodos derivados, `Optional`, `@Query`
+7. [Capas de la API: controlador, servicio, DTO y validación](08-capas-web-servicio-dto.md) — `@RestController`, `@Service`, `@Valid`, BCrypt
+8. [Receta CRUD: plantillas para un módulo nuevo](09-receta-crud.md) — migración → entidad → repositorio → DTOs → servicio → controlador
+9. [Tests unitarios: JUnit 5 + Mockito + AssertJ](10-tests-unitarios.md) — mocks, Given/When/Then, errores típicos
+10. [Spring Security y JWT: login y protección de la API](11-spring-security-jwt.md) — JWT, BCrypt, filtro, `SecurityConfig`, preguntas de repaso
+11. [Problemas encontrados y solución](99-problemas-encontrados.md) — se amplía siempre
 
 ## Próximos temas (se irán añadiendo)
 
