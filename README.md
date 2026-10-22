@@ -5,8 +5,8 @@ de supermercado por **precio, ingredientes y cantidad del envase** (pack de 12, 
 
 La app no compra nada online: solo planifica. La compra se hace en la tienda.
 
-> **Estado: en desarrollo.** La autenticación está terminada de punta a punta; el dominio
-> (productos, despensa y compra) es lo siguiente.
+> **Estado: en desarrollo.** La autenticación y los productos están terminados de punta a punta
+> (API y pantallas en Angular); la despensa y la compra son lo siguiente.
 
 ## Qué hay hecho y qué falta
 
@@ -18,6 +18,7 @@ La app no compra nada online: solo planifica. La compra se hace en la tienda.
 - [x] Documentación de la API con Swagger/OpenAPI, con botón *Authorize* para el JWT
 - [x] Frontend Angular: login, registro, interceptor que envía el JWT y guard de rutas
 - [x] Productos manuales, privados por usuario (`/api/products`: crear, listar, ver, editar y borrar; ver otro usuario devuelve 404)
+- [x] Frontend Angular de productos: listar, crear, editar y borrar (`/productos`)
 - [ ] Despensa: cantidades, stock bajo y consumo programado
 - [ ] Compra: lista por defecto, listas con nombre y total estimado
 - [ ] Búsqueda de productos de Mercadona
@@ -164,3 +165,11 @@ docker-compose.yml
 
 Cada funcionalidad va en una rama `feature/...`, con commits pequeños y un Pull Request
 hacia `main`. El flujo está explicado en [`apuntes/02-git-flujo.md`](apuntes/02-git-flujo.md).
+
+## Cómo está hecho
+
+Es un proyecto personal de aprendizaje y lo desarrollo **con ayuda de IA (Claude) como
+herramienta**. Algunos commits llevan a Claude como coautor. Las decisiones del proyecto
+están documentadas en [`docs/SESIONES.md`](docs/SESIONES.md), el código se revisa y se prueba
+(tests automáticos y pruebas manuales de punta a punta) y en [`apuntes/`](apuntes/00-indice.md)
+dejo escrito lo que voy entendiendo de cada parte.
