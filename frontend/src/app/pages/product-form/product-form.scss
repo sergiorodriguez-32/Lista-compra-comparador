@@ -1,0 +1,6 @@
+.tarjeta { max-width: 640px; margin: 1rem auto; padding: 1rem; }
+form { display: flex; flex-direction: column; gap: 0.5rem; }
+.fila { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.fila mat-form-field { flex: 1 1 140px; }
+.acciones { display: flex; gap: 0.75rem; }
+.error { color: var(--mat-sys-error); margin: 0; }

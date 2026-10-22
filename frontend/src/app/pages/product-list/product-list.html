@@ -1,0 +1,51 @@
+<main class="pagina">
+  <header class="cabecera">
+    <h1>Mis productos</h1>
+    <a mat-stroked-button routerLink="/">Volver</a>
+  </header>
+  <a mat-flat-button class="nuevo" routerLink="/productos/nuevo">Nuevo producto</a>
+
+  @if (errorBorrado()) {
+  <p class="error">{{ errorBorrado() }}</p>
+  }
+
+  <!-- @if / @else if / @else: solo se pinta UNA de estas ramas, según el estado -->
+  @if (cargando()) {
+  <p>Cargando productos…</p>
+  } @else if (error()) {
+  <p class="error">{{ error() }}</p>
+  <button mat-stroked-button type="button" (click)="cargar()">Reintentar</button>
+  } @else if (lista().length === 0) {
+  <p>Todavía no tienes productos.</p>
+  } @else {
+  <ul class="lista">
+    <!-- track: cómo identifica Angular cada elemento para no repintar toda la lista al cambiar -->
+    @for (p of lista(); track p.id) {
+    <li>
+      <mat-card class="producto">
+        <mat-card-header>
+          <mat-card-title>{{ p.name }}</mat-card-title>
+          @if (p.brand) {
+          <mat-card-subtitle>{{ p.brand }}</mat-card-subtitle>
+          }
+        </mat-card-header>
+        <mat-card-content>
+          <p class="precio">{{ p.price | currency: 'EUR' }}</p>
+          <p>
+            {{ p.packageAmount | number }} {{ unidades[p.packageUnit] }} · {{ categorias[p.category] }}
+          </p>
+          @if (p.ingredients) {
+          <p class="ingredientes">Ingredientes: {{ p.ingredients }}</p>
+          }
+        </mat-card-content>
+        <mat-card-actions>
+          <!-- [routerLink]="[...]" construye la ruta uniendo las partes: /productos/7/editar -->
+          <a mat-button [routerLink]="['/productos', p.id, 'editar']">Editar</a>
+          <button mat-button type="button" (click)="borrar(p)">Borrar</button>
+        </mat-card-actions>
+      </mat-card>
+    </li>
+    }
+  </ul>
+  }
+</main>
