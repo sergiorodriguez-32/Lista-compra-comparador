@@ -8,6 +8,24 @@ export type PackageUnit = 'UNIDAD' | 'KG' | 'LITRO' | 'GRAMO' | 'ML';
 export type ProductCategory = 'SECO' | 'CONGELADO' | 'FRESCO' | 'FRUTA' | 'DROGUERIA';
 export type ProductSource = 'MANUAL' | 'MERCADONA' | 'ALCAMPO' | 'AHORRAMAS';
 
+// Textos para mostrar al usuario. Record<ProductCategory, string> obliga a tener una entrada
+// por cada categoría: si algún día se añade una al tipo y se olvida aquí, no compila.
+export const CATEGORIAS: Record<ProductCategory, string> = {
+  SECO: 'Seco',
+  CONGELADO: 'Congelado',
+  FRESCO: 'Fresco',
+  FRUTA: 'Fruta',
+  DROGUERIA: 'Droguería',
+};
+
+export const UNIDADES: Record<PackageUnit, string> = {
+  UNIDAD: 'unidades',
+  KG: 'kg',
+  LITRO: 'L',
+  GRAMO: 'g',
+  ML: 'ml',
+};
+
 /** Lo que devuelve la API (equivale a ProductResponse.java). */
 export interface ProductResponse {
   id: number;
