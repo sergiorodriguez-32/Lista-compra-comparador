@@ -17,7 +17,7 @@ La app no compra nada online: solo planifica. La compra se hace en la tienda.
 - [x] Tests unitarios de `UserService` y `JwtService` (JUnit 5 + Mockito)
 - [x] Documentación de la API con Swagger/OpenAPI, con botón *Authorize* para el JWT
 - [x] Frontend Angular: login, registro, interceptor que envía el JWT y guard de rutas
-- [ ] Productos manuales (privados por usuario)
+- [x] Productos manuales, privados por usuario (`/api/products`: crear, listar, ver, editar y borrar; ver otro usuario devuelve 404)
 - [ ] Despensa: cantidades, stock bajo y consumo programado
 - [ ] Compra: lista por defecto, listas con nombre y total estimado
 - [ ] Búsqueda de productos de Mercadona
