@@ -1,6 +1,9 @@
 <main class="inicio">
   <h1>Lista de la compra</h1>
   <p>Sesión iniciada. Aquí irán Despensa y Compra.</p>
-  <a mat-flat-button routerLink="/productos">Mis productos</a>
+  <div class="accesos">
+    <a mat-flat-button routerLink="/productos">Mis productos</a>
+    <a mat-flat-button routerLink="/despensa">Mi despensa</a>
+  </div>
   <button mat-stroked-button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
 </main>
