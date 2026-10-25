@@ -2,6 +2,7 @@ package com.sergiorodriguez.listacompra.web;
 
 import com.sergiorodriguez.listacompra.core.exception.EmailAlreadyRegisteredException;
 import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
+import com.sergiorodriguez.listacompra.core.exception.PantryItemNotFoundException;
 import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -73,6 +74,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleProductoNoEncontrado(ProductNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(PantryItemNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleItemDespensaNoEncontrado(PantryItemNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }
