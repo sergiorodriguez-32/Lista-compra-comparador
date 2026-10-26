@@ -38,6 +38,17 @@ describe('Pantry', () => {
     expect(recibido).toEqual([respuesta]);
   });
 
+  it('lowStock hace GET /api/pantry/low-stock y devuelve los items', () => {
+    let recibido: PantryItemResponse[] | undefined;
+    service.lowStock().subscribe(lista => (recibido = lista));
+
+    const peticion = http.expectOne('/api/pantry/low-stock');
+    expect(peticion.request.method).toBe('GET');
+    peticion.flush([respuesta]);
+
+    expect(recibido).toEqual([respuesta]);
+  });
+
   it('add hace POST /api/pantry con productId y quantity en el cuerpo', () => {
     let recibido: PantryItemResponse | undefined;
     service.add({ productId: 1, quantity: 6 }).subscribe(i => (recibido = i));

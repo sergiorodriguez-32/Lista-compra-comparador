@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
+import { Component, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,6 +35,9 @@ export class PantryList implements OnInit {
   // Error al añadir, cambiar la cantidad o borrar: aparte de 'error' para no esconder la lista
   errorAccion = signal<string | null>(null);
   anadiendo = signal(false);
+  // Items en stock bajo según el umbral del usuario (lo calcula el servidor)
+  bajos = signal<PantryItemResponse[]>([]);
+  nombresBajos = computed(() => this.bajos().map(i => i.product.name).join(', '));
 
   readonly unidades = UNIDADES;
 
@@ -47,6 +50,7 @@ export class PantryList implements OnInit {
 
   ngOnInit() {
     this.cargar();
+    this.cargarBajos();
     // Si falla este, el desplegable queda vacío; la lista de la despensa sigue funcionando
     this.products.list().subscribe({ next: productos => this.productos.set(productos) });
   }
@@ -64,6 +68,14 @@ export class PantryList implements OnInit {
         this.error.set('No se pudo cargar la despensa');
         this.cargando.set(false);
       },
+    });
+  }
+
+  // Si falla, simplemente no sale el aviso; la lista de la despensa sigue funcionando
+  cargarBajos() {
+    this.pantry.lowStock().subscribe({
+      next: items => this.bajos.set(items),
+      error: () => this.bajos.set([]),
     });
   }
 
@@ -86,6 +98,7 @@ export class PantryList implements OnInit {
             ? lista.map(i => (i.id === item.id ? item : i))
             : [...lista, item],
         );
+        this.cargarBajos();
         this.formDir().resetForm();
         this.anadiendo.set(false);
       },
@@ -104,8 +117,10 @@ export class PantryList implements OnInit {
     this.errorAccion.set(null);
 
     this.pantry.updateQuantity(item.id, nueva).subscribe({
-      next: actualizado =>
-        this.lista.update(lista => lista.map(i => (i.id === actualizado.id ? actualizado : i))),
+      next: actualizado => {
+        this.lista.update(lista => lista.map(i => (i.id === actualizado.id ? actualizado : i)));
+        this.cargarBajos();
+      },
       error: () => this.errorAccion.set(`No se pudo cambiar "${item.product.name}"`),
     });
   }
@@ -115,7 +130,10 @@ export class PantryList implements OnInit {
     this.errorAccion.set(null);
 
     this.pantry.delete(item.id).subscribe({
-      next: () => this.lista.update(lista => lista.filter(i => i.id !== item.id)),
+      next: () => {
+        this.lista.update(lista => lista.filter(i => i.id !== item.id));
+        this.cargarBajos();
+      },
       error: () => this.errorAccion.set(`No se pudo quitar "${item.product.name}"`),
     });
   }
