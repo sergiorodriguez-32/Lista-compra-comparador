@@ -162,7 +162,6 @@ docker-compose.yml
 - [`docs/FUNCIONALIDADES.md`](docs/FUNCIONALIDADES.md): qué hace cada apartado
 - [`docs/REQUISITOS.md`](docs/REQUISITOS.md): requisitos, reglas de negocio y fases
 - [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md): modelo de datos e integraciones con supermercados
-- [`docs/SESIONES.md`](docs/SESIONES.md): diario de decisiones
 - [`apuntes/`](apuntes/00-indice.md): apuntes de aprendizaje (Spring, JPA, JWT, tests...)
 
 ## Cómo trabajo
@@ -174,6 +173,6 @@ hacia `main`. El flujo está explicado en [`apuntes/02-git-flujo.md`](apuntes/02
 
 Es un proyecto personal de aprendizaje y lo desarrollo **con ayuda de IA (Claude) como
 herramienta**. Algunos commits llevan a Claude como coautor. Las decisiones del proyecto
-están documentadas en [`docs/SESIONES.md`](docs/SESIONES.md), el código se revisa y se prueba
+están documentadas en [`docs/`](docs/), el código se revisa y se prueba
 (tests automáticos y pruebas manuales de punta a punta) y en [`apuntes/`](apuntes/00-indice.md)
 dejo escrito lo que voy entendiendo de cada parte.

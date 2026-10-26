@@ -2,7 +2,7 @@
 
 Resumen técnico del comparador de listas de la compra. Sirve para ponerse al día de golpe
 (por ejemplo, al empezar una conversación nueva con Claude: *"lee docs/ARQUITECTURA.md,
-docs/FUNCIONALIDADES.md y docs/SESIONES.md"*).
+docs/FUNCIONALIDADES.md y docs/REQUISITOS.md"*).
 
 > **Estado:** idea y modelo de datos cerrados (29/09/2026); requisitos cerrados el 07/10/2026
 > (ver [REQUISITOS.md](REQUISITOS.md), que modifica el modelo y las rutas de abajo). Listo para
@@ -112,7 +112,7 @@ lista-compra-comparador/
 │       ├── export/               generación del PDF de la lista de la compra
 │       └── web/                  controladores REST, DTOs y GlobalExceptionHandler
 ├── frontend/                   (Angular CLI) — pendiente de crear
-├── docs/                       ARQUITECTURA.md · FUNCIONALIDADES.md · SESIONES.md
+├── docs/                       ARQUITECTURA.md · FUNCIONALIDADES.md · REQUISITOS.md
 ├── docker-compose.yml           PostgreSQL de desarrollo — pendiente de crear
 └── README.md                    pendiente (se escribe en la fase de pulido)
 ```
