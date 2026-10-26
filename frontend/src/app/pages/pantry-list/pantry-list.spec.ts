@@ -33,16 +33,22 @@ describe('PantryList', () => {
   /** Texto que ve el usuario en pantalla */
   const pantalla = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
 
-  /** Responde a las dos peticiones que lanza ngOnInit. */
-  async function cargar(items: PantryItemResponse[], productos: ProductResponse[]) {
+  /** Responde a las tres peticiones que lanza ngOnInit (el stock bajo es opcional: por defecto, ninguno). */
+  async function cargar(
+    items: PantryItemResponse[],
+    productos: ProductResponse[],
+    bajos: PantryItemResponse[] = [],
+  ) {
     http.expectOne('/api/pantry').flush(items);
     http.expectOne('/api/products').flush(productos);
+    http.expectOne('/api/pantry/low-stock').flush(bajos);
     await fixture.whenStable();
   }
 
   it('mientras llega la respuesta muestra "Cargando"', () => {
     http.expectOne('/api/pantry'); // pendiente, sin responder
     http.expectOne('/api/products');
+    http.expectOne('/api/pantry/low-stock');
     expect(pantalla()).toContain('Cargando despensa');
   });
 
@@ -70,6 +76,7 @@ describe('PantryList', () => {
   it('si la API falla muestra el error y permite reintentar', async () => {
     http.expectOne('/api/pantry').flush(null, { status: 500, statusText: 'Server Error' });
     http.expectOne('/api/products').flush([huevos]);
+    http.expectOne('/api/pantry/low-stock').flush([]);
     await fixture.whenStable();
 
     expect(pantalla()).toContain('No se pudo cargar la despensa');
@@ -85,6 +92,7 @@ describe('PantryList', () => {
     expect(peticion.request.method).toBe('PATCH');
     expect(peticion.request.body).toEqual({ quantity: 7 });
     peticion.flush({ ...itemHuevos, quantity: 7 });
+    http.expectOne('/api/pantry/low-stock').flush([]); // al cambiar la cantidad se vuelve a pedir
     await fixture.whenStable();
 
     expect(pantalla()).toContain('7 unidades');
@@ -109,6 +117,7 @@ describe('PantryList', () => {
     expect(peticion.request.method).toBe('POST');
     expect(peticion.request.body).toEqual({ productId: 1, quantity: 6 });
     peticion.flush(itemHuevos);
+    http.expectOne('/api/pantry/low-stock').flush([]);
     await fixture.whenStable();
 
     expect(pantalla()).toContain('Huevos L');
@@ -121,6 +130,7 @@ describe('PantryList', () => {
     fixture.componentInstance.form.setValue({ productId: 1, quantity: 6 });
     fixture.componentInstance.anadir();
     http.expectOne('/api/pantry').flush({ ...itemHuevos, quantity: 12 }); // el servidor suma
+    http.expectOne('/api/pantry/low-stock').flush([]);
     await fixture.whenStable();
 
     expect(fixture.componentInstance.lista().length).toBe(1);
@@ -144,10 +154,44 @@ describe('PantryList', () => {
     const peticion = http.expectOne('/api/pantry/5');
     expect(peticion.request.method).toBe('DELETE');
     peticion.flush(null);
+    http.expectOne('/api/pantry/low-stock').flush([]);
     await fixture.whenStable();
 
     expect(pantalla()).not.toContain('Huevos L');
     expect(pantalla()).toContain('Tu despensa está vacía');
+  });
+
+  it('si hay productos en stock bajo muestra el aviso con sus nombres', async () => {
+    await cargar([itemHuevos], [huevos], [itemHuevos]);
+
+    expect(pantalla()).toContain('Te queda poco de: Huevos L');
+  });
+
+  it('si no hay stock bajo no muestra el aviso', async () => {
+    await cargar([itemHuevos], [huevos], []);
+
+    expect(pantalla()).not.toContain('Te queda poco');
+  });
+
+  it('al restar vuelve a pedir el stock bajo y el aviso aparece', async () => {
+    await cargar([itemHuevos], [huevos], []);
+
+    fixture.componentInstance.cambiar(itemHuevos, -1);
+    http.expectOne('/api/pantry/5').flush({ ...itemHuevos, quantity: 5 });
+    http.expectOne('/api/pantry/low-stock').flush([{ ...itemHuevos, quantity: 5 }]);
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('Te queda poco de: Huevos L');
+  });
+
+  it('si falla la petición del stock bajo no hay aviso pero la lista sigue', async () => {
+    http.expectOne('/api/pantry').flush([itemHuevos]);
+    http.expectOne('/api/products').flush([huevos]);
+    http.expectOne('/api/pantry/low-stock').flush(null, { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('Huevos L');
+    expect(pantalla()).not.toContain('Te queda poco');
   });
 
   it('si el usuario cancela la confirmación no quita nada', async () => {
