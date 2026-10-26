@@ -29,6 +29,9 @@
   @if (errorAccion()) {
   <p class="error">{{ errorAccion() }}</p>
   }
+  @if (bajos().length > 0) {
+  <p class="aviso">Te queda poco de: {{ nombresBajos() }}</p>
+  }
 
   @if (cargando()) {
   <p>Cargando despensa…</p>

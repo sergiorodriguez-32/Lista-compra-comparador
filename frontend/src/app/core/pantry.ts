@@ -29,6 +29,11 @@ export class Pantry {
     return this.http.get<PantryItemResponse[]>(this.url);
   }
 
+  // Items cuya cantidad está en el umbral de stock bajo del usuario o por debajo
+  lowStock() {
+    return this.http.get<PantryItemResponse[]>(`${this.url}/low-stock`);
+  }
+
   // Si el producto ya estaba en la despensa, el backend suma la cantidad al item existente
   add(datos: PantryItemRequest) {
     return this.http.post<PantryItemResponse>(this.url, datos);
