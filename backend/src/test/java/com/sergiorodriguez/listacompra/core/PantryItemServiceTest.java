@@ -138,6 +138,33 @@ class PantryItemServiceTest {
     }
 
     @Test
+    @DisplayName("stockBajo consulta con el umbral propio del usuario")
+    void stockBajo_usaElUmbralDelUsuario() {
+        BigDecimal umbral = new BigDecimal("2");
+        ana.setLowStockThreshold(umbral);
+        Product huevos = productoDeAna(1L);
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(ana));
+        when(pantryItemRepository.findByOwnerIdAndQuantityLessThanEqual(7L, umbral))
+                .thenReturn(List.of(itemDeAna(6L, huevos, "2")));
+
+        List<PantryItemResponse> lista = pantryItemService.stockBajo(EMAIL);
+
+        assertThat(lista).extracting(PantryItemResponse::id).containsExactly(6L);
+    }
+
+    @Test
+    @DisplayName("stockBajo devuelve lista vacía si ningún item llega al umbral")
+    void stockBajo_sinItemsBajos_devuelveListaVacia() {
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(ana));
+        when(pantryItemRepository.findByOwnerIdAndQuantityLessThanEqual(7L, ana.getLowStockThreshold()))
+                .thenReturn(List.of());
+
+        List<PantryItemResponse> lista = pantryItemService.stockBajo(EMAIL);
+
+        assertThat(lista).isEmpty();
+    }
+
+    @Test
     @DisplayName("cambiarCantidad sustituye la cantidad del item del usuario")
     void cambiarCantidad_itemPropio_sustituyeLaCantidad() {
         PantryItem existente = itemDeAna(5L, productoDeAna(1L), "12");
