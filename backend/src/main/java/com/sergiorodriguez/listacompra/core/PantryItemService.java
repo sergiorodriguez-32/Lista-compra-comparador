@@ -82,4 +82,15 @@ public class PantryItemService {
         return pantryItemRepository.findByIdAndOwnerId(id, usuario(email).getId())
                 .orElseThrow(() -> new PantryItemNotFoundException(id));
     }
+
+    /** Items de la despensa del usuario con cantidad igual o inferior a su umbral de stock bajo. */
+    @Transactional(readOnly = true)
+    public List<PantryItemResponse> stockBajo(String email) {
+        User usuario = usuario(email);
+        return pantryItemRepository
+                .findByOwnerIdAndQuantityLessThanEqual(usuario.getId(), usuario.getLowStockThreshold())
+                .stream()
+                .map(PantryItemResponse::from)
+                .toList();
+    }
 }
