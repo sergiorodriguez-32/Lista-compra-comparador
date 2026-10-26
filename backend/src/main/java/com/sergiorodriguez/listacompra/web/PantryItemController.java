@@ -52,4 +52,10 @@ public class PantryItemController {
     public void borrar(@AuthenticationPrincipal String email, @PathVariable Long id) {
         pantryItemService.borrar(email, id);
     }
+
+    /** GET /api/pantry/low-stock: items de la despensa en el umbral de stock bajo del usuario o por debajo. */
+    @GetMapping("/low-stock")
+    public List<PantryItemResponse> stockBajo(@AuthenticationPrincipal String email) {
+        return pantryItemService.stockBajo(email);
+    }
 }
