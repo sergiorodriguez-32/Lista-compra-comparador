@@ -5,8 +5,8 @@ de supermercado por **precio, ingredientes y cantidad del envase** (pack de 12, 
 
 La app no compra nada online: solo planifica. La compra se hace en la tienda.
 
-> **Estado: en desarrollo.** La autenticación y los productos están terminados de punta a punta
-> (API y pantallas en Angular); la despensa y la compra son lo siguiente.
+> **Estado: en desarrollo.** La autenticación, los productos y la despensa están terminados de
+> punta a punta (API y pantallas en Angular); el aviso de stock bajo y la compra son lo siguiente.
 
 ## Qué hay hecho y qué falta
 
@@ -19,7 +19,11 @@ La app no compra nada online: solo planifica. La compra se hace en la tienda.
 - [x] Frontend Angular: login, registro, interceptor que envía el JWT y guard de rutas
 - [x] Productos manuales, privados por usuario (`/api/products`: crear, listar, ver, editar y borrar; ver otro usuario devuelve 404)
 - [x] Frontend Angular de productos: listar, crear, editar y borrar (`/productos`)
-- [ ] Despensa: cantidades, stock bajo y consumo programado
+- [x] Despensa (`/api/pantry`): añadir (suma si el producto ya está), listar, cambiar la cantidad y quitar; privada por usuario
+- [x] Frontend Angular de la despensa (`/despensa`)
+- [x] Stock bajo en la API (`GET /api/pantry/low-stock`), con umbral propio de cada usuario
+- [ ] Aviso de stock bajo en el frontend
+- [ ] Consumo programado
 - [ ] Compra: lista por defecto, listas con nombre y total estimado
 - [ ] Búsqueda de productos de Mercadona
 - [ ] Historial de compras y estadísticas de gasto
