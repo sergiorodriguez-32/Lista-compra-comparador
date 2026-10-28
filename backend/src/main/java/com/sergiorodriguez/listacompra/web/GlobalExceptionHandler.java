@@ -4,6 +4,7 @@ import com.sergiorodriguez.listacompra.core.exception.EmailAlreadyRegisteredExce
 import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
 import com.sergiorodriguez.listacompra.core.exception.PantryItemNotFoundException;
 import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
+import com.sergiorodriguez.listacompra.core.exception.ShoppingListItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +82,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PantryItemNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleItemDespensaNoEncontrado(PantryItemNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    /** Item de la lista de la compra inexistente o de otro usuario. Responde 404. */
+    @ExceptionHandler(ShoppingListItemNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleItemCompraNoEncontrado(ShoppingListItemNotFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }
