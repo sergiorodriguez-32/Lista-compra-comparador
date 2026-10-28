@@ -227,3 +227,7 @@ Pendiente de decidir despliegue (backend, frontend, base de datos en producción
 - [ ] Comprobar si Mercadona/Alcampo devuelven valores nutricionales en el detalle de producto.
 - [ ] Elegir librería de generación de PDF para la exportación de la lista de Compra.
 - [ ] Decidir dónde se despliega (backend/frontend/BD) cuando el proyecto esté maduro.
+- [ ] **Último hito:** tarea diaria (GitHub Actions con cron) que ejecute tests de contrato contra
+      Mercadona, Alcampo y Ahorramas y avise si cambian su API/HTML (ver RNF-13). Solo detecta y
+      avisa; el arreglo del provider es manual. Probar antes si las IPs de GitHub Actions no están
+      bloqueadas por el anti-bot de las tiendas.
