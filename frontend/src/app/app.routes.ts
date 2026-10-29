@@ -6,6 +6,7 @@ import { ProductForm } from './pages/product-form/product-form';
 import { ProductList } from './pages/product-list/product-list';
 import { Register } from './pages/register/register';
 import { PantryList } from './pages/pantry-list/pantry-list';
+import { ShoppingListPage } from './pages/shopping-list/shopping-list';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   // :id es un parámetro: en /productos/7/editar, id vale 7
   { path: 'productos/:id/editar', component: ProductForm, canActivate: [authGuard] },
   { path: 'despensa', component: PantryList, canActivate: [authGuard] },
+  { path: 'compra', component: ShoppingListPage, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },
 ];

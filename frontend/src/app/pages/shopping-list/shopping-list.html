@@ -1,0 +1,73 @@
+<main class="pagina">
+  <header class="cabecera">
+    <h1>Lista de la compra</h1>
+    <a mat-stroked-button routerLink="/">Volver</a>
+  </header>
+  @if (productos().length === 0) {
+  <p>Para llenar la lista, primero crea un producto en <a routerLink="/productos">Mis productos</a>.</p>
+  } @else {
+  <form class="anadir" [formGroup]="form" (ngSubmit)="anadir()">
+    <mat-form-field appearance="outline">
+      <mat-label>Producto</mat-label>
+      <mat-select formControlName="productId">
+        @for (p of productos(); track p.id) {
+        <mat-option [value]="p.id">{{ p.name }}</mat-option>
+        }
+      </mat-select>
+      <mat-error>Elige un producto</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Envases</mat-label>
+      <input matInput type="number" step="1" min="1" max="999" formControlName="packages" />
+      <mat-error>Indica un número entero de envases (1 a 999)</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" [disabled]="anadiendo()">Añadir</button>
+  </form>
+  }
+  @if (errorAccion()) {
+  <p class="error">{{ errorAccion() }}</p>
+  }
+
+  @if (cargando()) {
+  <p>Cargando lista…</p>
+  } @else if (error()) {
+  <p class="error">{{ error() }}</p>
+  <button mat-stroked-button type="button" (click)="cargar()">Reintentar</button>
+  } @else if (items().length === 0) {
+  <p>Tu lista de la compra está vacía.</p>
+  } @else {
+  <ul class="lista">
+    @for (item of items(); track item.id) {
+    <li>
+      <mat-card class="item" [class.marcado]="item.checked">
+        <mat-card-header>
+          <mat-card-title>{{ item.product.name }}</mat-card-title>
+          @if (item.product.brand) {
+          <mat-card-subtitle>{{ item.product.brand }}</mat-card-subtitle>
+          }
+        </mat-card-header>
+        <mat-card-content>
+          <mat-checkbox [checked]="item.checked" (change)="marcar(item, $event.checked)">
+            Comprado
+          </mat-checkbox>
+          <p class="cantidad">
+            {{ item.packages }} {{ item.packages === 1 ? 'envase' : 'envases' }}
+            · {{ item.subtotal | number: '1.2-2' }} €
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button type="button" (click)="cambiar(item, -1)"
+                  [disabled]="item.packages === 1">−1</button>
+          <button mat-stroked-button type="button" (click)="cambiar(item, 1)"
+                  [disabled]="item.packages === 999">+1</button>
+          <button mat-button type="button" (click)="borrar(item)">Quitar</button>
+        </mat-card-actions>
+      </mat-card>
+    </li>
+    }
+  </ul>
+  <p class="total">Total estimado: {{ lista()!.estimatedTotal | number: '1.2-2' }} €</p>
+  }
+</main>
