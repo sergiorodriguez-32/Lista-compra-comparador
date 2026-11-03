@@ -9,6 +9,13 @@
   <p class="error">{{ errorBorrado() }}</p>
   }
 
+  @if (mensajeCompra()) {
+  <p class="aviso">{{ mensajeCompra() }}</p>
+  }
+  @if (errorCompra()) {
+  <p class="error">{{ errorCompra() }}</p>
+  }
+
   <!-- @if / @else if / @else: solo se pinta UNA de estas ramas, según el estado -->
   @if (cargando()) {
   <p>Cargando productos…</p>
@@ -41,6 +48,7 @@
         <mat-card-actions>
           <!-- [routerLink]="[...]" construye la ruta uniendo las partes: /productos/7/editar -->
           <a mat-button [routerLink]="['/productos', p.id, 'editar']">Editar</a>
+          <button mat-button type="button" (click)="aCompra(p)">A Compra</button>
           <button mat-button type="button" (click)="borrar(p)">Borrar</button>
         </mat-card-actions>
       </mat-card>

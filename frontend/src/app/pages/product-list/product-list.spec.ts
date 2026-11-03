@@ -96,6 +96,34 @@ describe('ProductList', () => {
     expect(pantalla()).toContain('Huevos L');
   });
 
+
+  it('"A Compra" hace POST con 1 envase y avisa de que se añadió', async () => {
+    http.expectOne('/api/products').flush([huevos]);
+    await fixture.whenStable();
+
+    fixture.componentInstance.aCompra(huevos);
+
+    const peticion = http.expectOne('/api/shopping-list/items');
+    expect(peticion.request.method).toBe('POST');
+    expect(peticion.request.body).toEqual({ productId: 1, packages: 1 });
+    peticion.flush({});
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('"Huevos L" añadido a la compra');
+  });
+
+  it('si "A Compra" falla avisa y no esconde los productos', async () => {
+    http.expectOne('/api/products').flush([huevos]);
+    await fixture.whenStable();
+
+    fixture.componentInstance.aCompra(huevos);
+    http.expectOne('/api/shopping-list/items').flush(null, { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('No se pudo añadir "Huevos L" a la compra');
+    expect(pantalla()).toContain('Huevos L');
+  });
+
   it('si el borrado falla avisa y mantiene el producto', async () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     http.expectOne('/api/products').flush([huevos]);
@@ -108,4 +136,6 @@ describe('ProductList', () => {
     expect(pantalla()).toContain('No se pudo borrar "Huevos L"');
     expect(pantalla()).toContain('Huevos L');
   });
+
+
 });
