@@ -3,6 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { ShoppingList } from '../../core/shopping-list';
 import { CATEGORIAS, ProductResponse, Products, UNIDADES } from '../../core/products';
 
 @Component({
@@ -14,6 +15,7 @@ import { CATEGORIAS, ProductResponse, Products, UNIDADES } from '../../core/prod
 })
 export class ProductList implements OnInit {
   private products = inject(Products);
+  private shoppingList = inject(ShoppingList);
 
   // Estado de la pantalla. Un signal es una "caja" que avisa a la plantilla cuando cambia su
   // contenido: se lee con lista() y se modifica con lista.set(...).
@@ -22,6 +24,9 @@ export class ProductList implements OnInit {
   error = signal<string | null>(null);
   // Error al borrar: aparte de 'error' para no esconder la lista entera si falla un borrado
   errorBorrado = signal<string | null>(null);
+  // Resultado de "A Compra": aparte para no esconder la lista de productos si falla
+  mensajeCompra = signal<string | null>(null);
+  errorCompra = signal<string | null>(null);
 
   // La plantilla (HTML) solo ve lo que es público en la clase
   readonly categorias = CATEGORIAS;
@@ -44,6 +49,16 @@ export class ProductList implements OnInit {
     });
   }
 
+  aCompra(producto: ProductResponse) {
+    this.mensajeCompra.set(null);
+    this.errorCompra.set(null);
+
+    // Siempre 1 envase. Si el producto ya estaba en la lista, el backend suma uno más.
+    this.shoppingList.add({ productId: producto.id, packages: 1 }).subscribe({
+      next: () => this.mensajeCompra.set(`"${producto.name}" añadido a la compra`),
+      error: () => this.errorCompra.set(`No se pudo añadir "${producto.name}" a la compra`),
+    });
+  }
   cargar() {
     this.cargando.set(true);
     this.error.set(null);
