@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Pantry, PantryItemResponse } from '../../core/pantry';
 import { ProductResponse, Products, UNIDADES } from '../../core/products';
-
+import { ShoppingList } from '../../core/shopping-list';
 
 @Component({
   selector: 'app-pantry-list',
@@ -23,6 +23,7 @@ import { ProductResponse, Products, UNIDADES } from '../../core/products';
 export class PantryList implements OnInit {
   private pantry = inject(Pantry);
   private products = inject(Products);
+  private shoppingList = inject(ShoppingList);
   private fb = inject(FormBuilder);
   // La directiva del <form>: permite resetear también el estado "enviado", no solo los valores
   private formDir = viewChild.required(FormGroupDirective);
@@ -35,6 +36,8 @@ export class PantryList implements OnInit {
   // Error al añadir, cambiar la cantidad o borrar: aparte de 'error' para no esconder la lista
   errorAccion = signal<string | null>(null);
   anadiendo = signal(false);
+  // Aviso de que se añadió a la compra; si falla, el error sale en 'errorAccion'
+  mensajeCompra = signal<string | null>(null);
   // Items en stock bajo según el umbral del usuario (lo calcula el servidor)
   bajos = signal<PantryItemResponse[]>([]);
   nombresBajos = computed(() => this.bajos().map(i => i.product.name).join(', '));
@@ -122,6 +125,17 @@ export class PantryList implements OnInit {
         this.cargarBajos();
       },
       error: () => this.errorAccion.set(`No se pudo cambiar "${item.product.name}"`),
+    });
+  }
+
+  aCompra(item: PantryItemResponse) {
+    this.mensajeCompra.set(null);
+    this.errorAccion.set(null);
+
+    // Siempre 1 envase. Si el producto ya estaba en la lista, el backend suma uno más.
+    this.shoppingList.add({ productId: item.product.id, packages: 1 }).subscribe({
+      next: () => this.mensajeCompra.set(`"${item.product.name}" añadido a la compra`),
+      error: () => this.errorAccion.set(`No se pudo añadir "${item.product.name}" a la compra`),
     });
   }
 

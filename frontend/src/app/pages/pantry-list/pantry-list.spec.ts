@@ -203,4 +203,29 @@ describe('PantryList', () => {
     http.expectNone('/api/pantry/5');
     expect(pantalla()).toContain('Huevos L');
   });
+
+  it('"A Compra" hace POST con 1 envase y avisa de que se añadió', async () => {
+    await cargar([itemHuevos], [huevos]);
+
+    fixture.componentInstance.aCompra(itemHuevos);
+
+    const peticion = http.expectOne('/api/shopping-list/items');
+    expect(peticion.request.method).toBe('POST');
+    expect(peticion.request.body).toEqual({ productId: 1, packages: 1 });
+    peticion.flush({});
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('"Huevos L" añadido a la compra');
+  });
+
+  it('si "A Compra" falla avisa y no esconde la despensa', async () => {
+    await cargar([itemHuevos], [huevos]);
+
+    fixture.componentInstance.aCompra(itemHuevos);
+    http.expectOne('/api/shopping-list/items').flush(null, { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+
+    expect(pantalla()).toContain('No se pudo añadir "Huevos L" a la compra');
+    expect(pantalla()).toContain('Huevos L');
+  });
 });
