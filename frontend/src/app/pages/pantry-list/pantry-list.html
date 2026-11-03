@@ -29,6 +29,9 @@
   @if (errorAccion()) {
   <p class="error">{{ errorAccion() }}</p>
   }
+  @if (mensajeCompra()) {
+  <p class="ok">{{ mensajeCompra() }}</p>
+  }
   @if (bajos().length > 0) {
   <p class="aviso">Te queda poco de: {{ nombresBajos() }}</p>
   }
@@ -60,6 +63,7 @@
           <button mat-stroked-button type="button" (click)="cambiar(item, -1)"
                   [disabled]="item.quantity === 0">−1</button>
           <button mat-stroked-button type="button" (click)="cambiar(item, 1)">+1</button>
+          <button mat-button type="button" (click)="aCompra(item)">A Compra</button>
           <button mat-button type="button" (click)="borrar(item)">Quitar</button>
         </mat-card-actions>
       </mat-card>

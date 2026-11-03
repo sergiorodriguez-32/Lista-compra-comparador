@@ -5,8 +5,9 @@ de supermercado por **precio, ingredientes y cantidad del envase** (pack de 12, 
 
 La app no compra nada online: solo planifica. La compra se hace en la tienda.
 
-> **Estado: en desarrollo.** La autenticación, los productos y la despensa están terminados de
-> punta a punta (API y pantallas en Angular); el aviso de stock bajo y la compra son lo siguiente.
+> **Estado: en desarrollo.** La autenticación, los productos, la despensa (con aviso de stock bajo)
+> y la lista de la compra por defecto están terminados de punta a punta (API y pantallas en
+> Angular); lo siguiente son el botón "A Despensa" y las listas con nombre.
 
 ## Qué hay hecho y qué falta
 
@@ -22,9 +23,12 @@ La app no compra nada online: solo planifica. La compra se hace en la tienda.
 - [x] Despensa (`/api/pantry`): añadir (suma si el producto ya está), listar, cambiar la cantidad y quitar; privada por usuario
 - [x] Frontend Angular de la despensa (`/despensa`)
 - [x] Stock bajo en la API (`GET /api/pantry/low-stock`), con umbral propio de cada usuario
-- [ ] Aviso de stock bajo en el frontend
+- [x] Aviso de stock bajo en el frontend (`/despensa`)
+- [x] Compra, lista por defecto (`/api/shopping-list`): añadir (suma envases si el producto ya está), cambiar envases, marcar como comprado y quitar; con total estimado (precio del envase × envases); privada por usuario
+- [x] Frontend Angular de la compra (`/compra`) y botón "A Compra" desde productos y despensa
+- [ ] Botón "A Despensa" (pasa lo comprado a la despensa y lo quita de la lista)
+- [ ] Compra: listas con nombre
 - [ ] Consumo programado
-- [ ] Compra: lista por defecto, listas con nombre y total estimado
 - [ ] Búsqueda de productos de Mercadona
 - [ ] Historial de compras y estadísticas de gasto
 - [ ] Lista de la compra en PDF
