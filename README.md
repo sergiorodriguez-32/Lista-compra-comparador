@@ -5,9 +5,9 @@ de supermercado por **precio, ingredientes y cantidad del envase** (pack de 12, 
 
 La app no compra nada online: solo planifica. La compra se hace en la tienda.
 
-> **Estado: en desarrollo.** La autenticación, los productos, la despensa (con aviso de stock bajo)
-> y la lista de la compra por defecto están terminados de punta a punta (API y pantallas en
-> Angular); lo siguiente son el botón "A Despensa" y las listas con nombre.
+> **Estado: en desarrollo.** La autenticación, los productos, la despensa (con aviso de stock bajo),
+> la lista de la compra por defecto y el botón "A Despensa" están terminados de punta a punta
+> (API y pantallas en Angular); lo siguiente son las listas con nombre.
 
 ## Qué hay hecho y qué falta
 
@@ -26,7 +26,7 @@ La app no compra nada online: solo planifica. La compra se hace en la tienda.
 - [x] Aviso de stock bajo en el frontend (`/despensa`)
 - [x] Compra, lista por defecto (`/api/shopping-list`): añadir (suma envases si el producto ya está), cambiar envases, marcar como comprado y quitar; con total estimado (precio del envase × envases); privada por usuario
 - [x] Frontend Angular de la compra (`/compra`) y botón "A Compra" desde productos y despensa
-- [ ] Botón "A Despensa" (pasa lo comprado a la despensa y lo quita de la lista)
+- [x] Botón "A Despensa" en la compra: pasa lo comprado a la despensa (envases × cantidad del envase) y lo quita de la lista
 - [ ] Compra: listas con nombre
 - [ ] Consumo programado
 - [ ] Búsqueda de productos de Mercadona
@@ -89,30 +89,16 @@ Los datos se guardan en un volumen, así que sobreviven aunque se borre el conte
 
 ### 3. Backend
 
-El backend lee la conexión a la base de datos de tres variables de entorno: `DB_USER` y
-`DB_PASSWORD` (con los mismos valores que `POSTGRES_USER` y `POSTGRES_PASSWORD` del `.env`)
-y `JWT_SECRET`. Spring Boot **no** lee el fichero `.env` por sí solo, así que hay que
-definirlas en la terminal antes de arrancar.
-
-En PowerShell:
-
-```powershell
-cd backend
-$env:DB_USER = "listacompracomparador"
-$env:DB_PASSWORD = "el_mismo_valor_que_POSTGRES_PASSWORD"
-$env:JWT_SECRET = "el_mismo_valor_que_JWT_SECRET_del_env"
-.\mvnw.cmd spring-boot:run
-```
-
-En Linux, macOS o Git Bash:
+El backend lee el `.env` de la raíz del repo (con `spring.config.import`), así que no hace
+falta definir nada más: usa `POSTGRES_USER`, `POSTGRES_PASSWORD` y `JWT_SECRET` de ahí.
 
 ```bash
 cd backend
-export DB_USER=listacompracomparador
-export DB_PASSWORD=el_mismo_valor_que_POSTGRES_PASSWORD
-export JWT_SECRET=el_mismo_valor_que_JWT_SECRET_del_env
-./mvnw spring-boot:run
+./mvnw spring-boot:run      # en PowerShell: .\mvnw.cmd spring-boot:run
 ```
+
+Si defines `DB_USER`, `DB_PASSWORD` o `JWT_SECRET` como variables de entorno, tienen
+prioridad sobre el `.env` (útil para apuntar a otra base de datos sin tocar el fichero).
 
 Al arrancar, Flyway crea las tablas. La API queda en <http://localhost:8080>.
 

@@ -2,6 +2,7 @@ package com.sergiorodriguez.listacompra.core;
 
 import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
 import com.sergiorodriguez.listacompra.core.exception.ShoppingListItemNotFoundException;
+import com.sergiorodriguez.listacompra.web.PantryItemRequest;
 import com.sergiorodriguez.listacompra.web.ShoppingItemRequest;
 import com.sergiorodriguez.listacompra.web.ShoppingListResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,6 +42,9 @@ class ShoppingListServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PantryItemService pantryItemService;
 
     @InjectMocks
     private ShoppingListService shoppingListService;
@@ -259,6 +264,41 @@ class ShoppingListServiceTest {
         assertThatThrownBy(() -> shoppingListService.borrar(EMAIL, 99L))
                 .isInstanceOf(ShoppingListItemNotFoundException.class);
 
+        verify(itemRepository, never()).delete(any());
+    }
+
+    @Test
+    @DisplayName("aDespensa suma a la despensa envases × cantidad del envase y quita el item de la lista")
+    void aDespensa_itemPropio_sumaUnidadBaseYQuitaItem() {
+        ShoppingList lista = listaDe(10L, ana);
+        ShoppingListItem huevos = itemDe(5L, lista, productoDeAna(1L, "2.50"), 2); // 2 packs de 12
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(ana));
+        when(itemRepository.findById(5L)).thenReturn(Optional.of(huevos));
+        when(itemRepository.findByListId(10L)).thenReturn(List.of());
+
+        ShoppingListResponse respuesta = shoppingListService.aDespensa(EMAIL, 5L);
+
+        ArgumentCaptor<PantryItemRequest> captor = ArgumentCaptor.forClass(PantryItemRequest.class);
+        verify(pantryItemService).anadir(eq(EMAIL), captor.capture());
+        assertThat(captor.getValue().productId()).isEqualTo(1L);
+        assertThat(captor.getValue().quantity()).isEqualByComparingTo("24"); // 24 huevos, no 2
+        verify(itemRepository).delete(huevos);
+        assertThat(respuesta.items()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("aDespensa de un item ajeno lanza ShoppingListItemNotFoundException y no toca la despensa")
+    void aDespensa_itemAjeno_lanzaNoEncontradoYNoTocaDespensa() {
+        User otra = new User();
+        otra.setId(8L);
+        ShoppingListItem deOtra = itemDe(99L, listaDe(20L, otra), productoDeAna(1L, "2.50"), 2);
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(ana));
+        when(itemRepository.findById(99L)).thenReturn(Optional.of(deOtra));
+
+        assertThatThrownBy(() -> shoppingListService.aDespensa(EMAIL, 99L))
+                .isInstanceOf(ShoppingListItemNotFoundException.class);
+
+        verify(pantryItemService, never()).anadir(any(), any());
         verify(itemRepository, never()).delete(any());
     }
 }

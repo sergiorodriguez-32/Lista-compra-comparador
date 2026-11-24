@@ -52,6 +52,16 @@ public class ShoppingListController {
         return shoppingListService.marcar(email, id, request.checked());
     }
 
+    /**
+     * POST /api/shopping-list/items/{id}/to-pantry: botón "A Despensa". Suma lo comprado a la
+     * despensa (envases × cantidad del envase) y quita el item. Responde 200 con la lista
+     * restante, o 404 si el item no existe o es de otro usuario.
+     */
+    @PostMapping("/items/{id}/to-pantry")
+    public ShoppingListResponse aDespensa(@AuthenticationPrincipal String email, @PathVariable Long id) {
+        return shoppingListService.aDespensa(email, id);
+    }
+
     /** DELETE /api/shopping-list/items/{id}: quita un item. Responde 200 con la lista restante. */
     @DeleteMapping("/items/{id}")
     public ShoppingListResponse borrar(@AuthenticationPrincipal String email, @PathVariable Long id) {

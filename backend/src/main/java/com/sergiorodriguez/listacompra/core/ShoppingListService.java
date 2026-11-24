@@ -3,6 +3,7 @@ package com.sergiorodriguez.listacompra.core;
 import com.sergiorodriguez.listacompra.core.exception.InvalidCredentialsException;
 import com.sergiorodriguez.listacompra.core.exception.ProductNotFoundException;
 import com.sergiorodriguez.listacompra.core.exception.ShoppingListItemNotFoundException;
+import com.sergiorodriguez.listacompra.web.PantryItemRequest;
 import com.sergiorodriguez.listacompra.web.ShoppingItemRequest;
 import com.sergiorodriguez.listacompra.web.ShoppingItemResponse;
 import com.sergiorodriguez.listacompra.web.ShoppingListResponse;
@@ -28,6 +29,7 @@ public class ShoppingListService {
     private final ShoppingListItemRepository itemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final PantryItemService pantryItemService;
 
     /** Devuelve la lista por defecto del usuario con su total, creándola si no existe. */
     @Transactional
@@ -83,6 +85,30 @@ public class ShoppingListService {
     @Transactional
     public ShoppingListResponse borrar(String email, Long itemId) {
         ShoppingListItem item = buscarPropio(email, itemId);
+        ShoppingList lista = item.getList();
+        itemRepository.delete(item);
+        return aRespuesta(lista);
+    }
+
+    /**
+     * Botón "A Despensa" (RF-35): suma a la despensa lo comprado y quita el item de la lista.
+     * La lista va en envases y la despensa en unidad base, así que se convierte:
+     * 2 envases de 12 huevos = 24 huevos. Si el producto ya estaba en la despensa, se suma
+     * (esa regla la pone {@link PantryItemService#anadir}). Todo va en una transacción: si
+     * falla la despensa, el item no se quita de la lista.
+     *
+     * <p>Falta registrar la compra en el historial: llegará con el módulo de historial.
+     *
+     * @throws ShoppingListItemNotFoundException si el item no existe o es de otro usuario
+     */
+    @Transactional
+    public ShoppingListResponse aDespensa(String email, Long itemId) {
+        ShoppingListItem item = buscarPropio(email, itemId);
+        Product producto = item.getProduct();
+        BigDecimal cantidad = producto.getPackageAmount().multiply(BigDecimal.valueOf(item.getPackages()));
+
+        pantryItemService.anadir(email, new PantryItemRequest(producto.getId(), cantidad));
+
         ShoppingList lista = item.getList();
         itemRepository.delete(item);
         return aRespuesta(lista);

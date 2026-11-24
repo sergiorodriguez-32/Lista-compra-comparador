@@ -53,6 +53,12 @@ export class ShoppingList {
     return this.http.patch<ShoppingListResponse>(`${this.url}/items/${id}/checked`, { checked });
   }
 
+  // Botón "A Despensa": el backend suma a la despensa (envases × envase) y quita el item.
+  // Devuelve la lista restante.
+  toPantry(id: number) {
+    return this.http.post<ShoppingListResponse>(`${this.url}/items/${id}/to-pantry`, {});
+  }
+
   // Devuelve 200 con la lista restante, no 204
   delete(id: number) {
     return this.http.delete<ShoppingListResponse>(`${this.url}/items/${id}`);
