@@ -48,6 +48,17 @@ describe('ShoppingList', () => {
     peticion.flush(respuesta);
   });
 
+  it('toPantry hace POST /api/shopping-list/items/7/to-pantry y devuelve la lista restante', () => {
+    let recibido: ShoppingListResponse | undefined;
+    service.toPantry(7).subscribe(l => (recibido = l));
+
+    const peticion = http.expectOne('/api/shopping-list/items/7/to-pantry');
+    expect(peticion.request.method).toBe('POST');
+    peticion.flush({ ...respuesta, items: [], estimatedTotal: 0 });
+
+    expect(recibido?.items).toEqual([]);
+  });
+
   // TODO tuyo: updatePackages → PATCH /api/shopping-list/items/7, body { packages: 3 }
   // TODO tuyo: setChecked    → PATCH /api/shopping-list/items/7/checked, body { checked: true }
   // TODO tuyo: delete        → DELETE /api/shopping-list/items/7, y comprueba que devuelve la lista (flush(respuesta))

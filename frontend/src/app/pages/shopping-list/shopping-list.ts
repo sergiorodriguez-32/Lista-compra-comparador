@@ -107,6 +107,16 @@ export class ShoppingListPage implements OnInit {
     });
   }
 
+  /** Botón "A Despensa": lo comprado pasa a la despensa y sale de la lista. */
+  aDespensa(item: ShoppingItemResponse) {
+    this.errorAccion.set(null);
+
+    this.shopping.toPantry(item.id).subscribe({
+      next: lista => this.lista.set(lista),
+      error: () => this.errorAccion.set(`No se pudo pasar "${item.product.name}" a la despensa`),
+    });
+  }
+
   borrar(item: ShoppingItemResponse) {
     if (!confirm(`¿Quitar "${item.product.name}" de la lista?`)) return;
     this.errorAccion.set(null);
